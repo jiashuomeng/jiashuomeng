@@ -1,0 +1,887 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="MySQL," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Every little helps" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="id 列　　从ID列可以判断SQL的执行顺序：从大到小，如果ID相同，就从上到下执行。如果行引用联合结果的其他行，那么它的值可能为NULL，这种情况下，table列的值会显示为&amp;lt;unionM,N&amp;gt;来指明行引用的是联合行中的带有指定M,N值的ID。
+
+select_type 列
+SIMPLE简单的 SELECT 语句（没有使用 union 或者 子查询）  
+
+PRIMARY最外层的 S">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL Explain 详解">
+<meta property="og:url" content="http://yoursite.com/2016/12/22/MySQL/explain/index.html">
+<meta property="og:site_name" content="Every little helps">
+<meta property="og:description" content="id 列　　从ID列可以判断SQL的执行顺序：从大到小，如果ID相同，就从上到下执行。如果行引用联合结果的其他行，那么它的值可能为NULL，这种情况下，table列的值会显示为&amp;lt;unionM,N&amp;gt;来指明行引用的是联合行中的带有指定M,N值的ID。
+
+select_type 列
+SIMPLE简单的 SELECT 语句（没有使用 union 或者 子查询）  
+
+PRIMARY最外层的 S">
+<meta property="og:image" content="http://yoursite.com/../../../../../self_img/2016/2016-10-12_111418.png">
+<meta property="og:image" content="http://yoursite.com/../../../../../self_img/2016/2016-10-12_131010.png">
+<meta property="og:image" content="http://yoursite.com/../../../../../self_img/2016/2016-10-12_143115.png">
+<meta property="og:updated_time" content="2016-12-22T11:44:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL Explain 详解">
+<meta name="twitter:description" content="id 列　　从ID列可以判断SQL的执行顺序：从大到小，如果ID相同，就从上到下执行。如果行引用联合结果的其他行，那么它的值可能为NULL，这种情况下，table列的值会显示为&amp;lt;unionM,N&amp;gt;来指明行引用的是联合行中的带有指定M,N值的ID。
+
+select_type 列
+SIMPLE简单的 SELECT 语句（没有使用 union 或者 子查询）  
+
+PRIMARY最外层的 S">
+<meta name="twitter:image" content="http://yoursite.com/../../../../../self_img/2016/2016-10-12_111418.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/12/22/MySQL/explain/"/>
+
+
+
+
+
+  <title> MySQL Explain 详解 | Every little helps </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Every little helps</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/22/MySQL/explain/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="joash">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/self_img/head.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Every little helps">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Every little helps" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                MySQL Explain 详解
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-22T00:00:00-05:00">
+                2016-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL/" itemprop="url" rel="index">
+                    <span itemprop="name">MySQL</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/12/22/MySQL/explain/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/22/MySQL/explain/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="id-列"><a href="#id-列" class="headerlink" title="id 列"></a>id 列</h3><p>　　从ID列可以判断SQL的执行顺序：从大到小，如果ID相同，就从上到下执行。如果行引用联合结果的其他行，那么它的值可能为NULL，这种情况下，table列的值会显示为<code>&lt;unionM,N&gt;</code>来指明行引用的是联合行中的带有指定<code>M,N</code>值的ID。</p>
+<hr>
+<h3 id="select-type-列"><a href="#select-type-列" class="headerlink" title="select_type 列"></a>select_type 列</h3><ul>
+<li><p><strong>SIMPLE</strong><br>简单的 <code>SELECT</code> 语句（没有使用 <code>union</code> 或者 子查询）  </p>
+</li>
+<li><p><strong>PRIMARY</strong><br>最外层的 <code>SELECT</code> 语句  </p>
+</li>
+<li><p><strong>UNION</strong><br>在一个 <code>UNION</code> 语句中第二或之后的SELECT语句  </p>
+</li>
+<li><p><strong>DEPENENT_UNION</strong><br>在一个 <code>UNION</code> 语句中第二或之后的 <code>SELECT</code> 语句，取决于外层的查询  </p>
+</li>
+<li><p><strong>UNION_RESULT</strong><br><code>UNION</code> 的结果集  </p>
+</li>
+<li><p><strong>SUBQUERY</strong><br>子查询中的第一个 <code>SELECT</code>  </p>
+</li>
+<li><p><strong>DEPENENT_SUBQUERY</strong><br>子查询中的第一个 <code>SELECT</code> ,取决于外层的查询</p>
+</li>
+<li><p><strong>DERIVED</strong><br><code>SELECT</code> 的驱动表（ <code>FROM</code> 子查询）</p>
+</li>
+<li><p><strong>MATERIALIZED</strong><br>物化子查询  </p>
+</li>
+<li><p><strong>UNCACHEABLE SUBQUERY</strong><br>不能将结果缓存的子查询，必须重新计算外部查询的每一行  </p>
+</li>
+<li><p><strong>UNCACHEABLE UNION</strong><br>在一个 <code>UNION</code> 中第二或之后的 <code>SELECT</code> 查询属于<code>UNCACHEABLE SUBQUERY</code>（请看 <code>UNCACHEABLE SUBQUERY</code> )  </p>
+</li>
+<li><p><strong>特别声明</strong><br><strong><code>DEPENDENT</code></strong>：典型代表就是使用了相关子查询。（相关子查询：子查询里包含了一个同时在子查询里，又在外部查询的表的查询）<br><strong><code>DEPENDENT SUBQUERY</code></strong>: 它不同于 <code>UNCACHEABLE SUBQUERY</code> 的求值。对于 <code>DEPENDENT SUBQUERY</code> ，子查询对于外部上下文里每一个集合中不同的变量值仅仅重新计算一次。而对于 <code>UNCACHEABLE SUBQUERY</code>，子查询对于外部上下文里的每一行都会重新计算一次。  </p>
+</li>
+</ul>
+<hr>
+<h3 id="table-列"><a href="#table-列" class="headerlink" title="table 列"></a>table 列</h3><p>SQL中使用到的表。它的值也可为下面的其中之一：  </p>
+<ul>
+<li><strong><code>&lt;unionM,N&gt;</code></strong>: 行引用了带有值为 <code>M,N</code> 的查询ID的联合行  </li>
+<li><strong><code>&lt;derivedN&gt;</code></strong>: 行引用了值为 <code>N</code> 的ID的驱动表结果。例如，它是从 <code>FROM</code> 子查询中的结果形成的驱动表的结果集  </li>
+</ul>
+<p>　　例：<code>EXPLAIN SELECT * FROM (SELECT * FROM vip_system_user) b WHERE b.id&gt;57</code>  </p>
+<p>　　　　<img src="../../../../../self_img/2016/2016-10-12_111418.png" width="800px" height="60px"></p>
+<ul>
+<li><strong><code>&lt;subqueryN&gt;</code></strong>: 行引用了一个值为 <code>N</code> 的ID的　<code>materialized subquery</code>（物化子查询）的结果。</li>
+</ul>
+<hr>
+<h3 id="partitions-列"><a href="#partitions-列" class="headerlink" title="partitions 列"></a>partitions 列</h3><p>查询中所匹配的记录所在的分区。这列只有在使用了 <code>PARTITIONS</code> 关键字时才会显示。对于没有使用分区表的，该值为NULL</p>
+<hr>
+<h3 id="type-列"><a href="#type-列" class="headerlink" title="type 列"></a>type 列</h3><hr>
+<p>连接类型  </p>
+<ul>
+<li><p><strong>system</strong><br>表只有一行（=system table）。这个是 <code>const</code> 连接类型的一个特例。  </p>
+</li>
+<li><p><strong>const</strong><br>该表最多只有一条匹配的行，这是读取查询的开始。因为这里只有一行，该行这列的值可以被优化器的剩余部分认为是常量。const表是非常快的，因为它们只会读取一次。<br><code>const</code> 用于当你与<strong><em>主键</em></strong> 或者<strong><em>唯一索引</em></strong>的所有部分比较的是<strong><em>常量</em></strong>值时。在以下的查询中，tal_name 可以被用作const表：  </p>
+</li>
+</ul>
+<p>　　<code>select * from tbl_name where primary_key = 1;</code><br>　　<code>select * from tbl_name where primary_key_part1 = 1 and primary_key_part2 = 2</code></p>
+<ul>
+<li><strong>eq_ref</strong><br>从该表中读取一行与前一张表的所有行的每一种组合。除了 <code>system</code> 和 <code>const</code> 类型，这可能是最好的连接类型了。它通常于用在连接时使用了索引的所有部分，并且索引是一个<strong><em>主键索引</em></strong>或者<strong><em>唯一非空索引</em></strong>。</li>
+</ul>
+<p>　　例：<code>EXPLAIN SELECT u.user_name FROM vip_system_user_role ur LEFT OUTER JOIN vip_system_user u ON ur.sys_user_id=u.id</code>  </p>
+<p>　　　　<img src="../../../../../self_img/2016/2016-10-12_131010.png" width="800px" height="60px">  </p>
+<ul>
+<li><strong>ref</strong><br>所有索引匹配的行的值与前一张表的所有行的每一种组合。ref用于连接仅使用最左前缀索引或者索引不是主键索引，唯一索引（换句话说，连接不能基于该索引值选择一行 ）。如果索引用于匹配少数行，这是一个好的连接类型。<code>ref</code> 能够用于使用 <code>=</code> 或者 <code>&lt;=&gt;</code> 操作符的索引列中。  </li>
+</ul>
+<p>　　例：<code>EXPLAIN SELECT * FROM vip_system_permission p1 LEFT OUTER JOIN vip_system_permission p2 ON p1.id=p2.parent_id</code></p>
+<p>　　　　<img src="../../../../../self_img/2016/2016-10-12_143115.png" width="800px" height="60px">  </p>
+<ul>
+<li><p><strong>fulltext</strong><br>这个连接使用fulltext索引执行  </p>
+</li>
+<li><p><strong>ref_or_null</strong><br>这个连接类型是类似ref，但有些额外的不同：MySQL要做一些额外操作去搜索包含NULL值的行。这个连接类型通常用于优化执行子查询  </p>
+</li>
+<li><p><strong>index_merge</strong><br>这个连接类型说明使用了索引合并优化。在这种情况下，在输出行的 <code>key</code> 列包含了一个使用索引的列表，并且 <code>key_len</code> 包含了使用了索引最长的那部分列表。</p>
+</li>
+<li><p><strong>unique_subquery</strong><br>当子查询中查询的字段是<strong><em>主键</em></strong>或者<strong><em>唯一性索引</em></strong>时，用来在 <code>IN</code> 子查询中替代 <code>ref</code> 类型。  </p>
+</li>
+</ul>
+<p>　　例：<code>EXPLAIN SELECT * FROM vip_system_permission p1 WHERE p1.parent_id IN (SELECT id FROM vip_system_permission)</code>  </p>
+<ul>
+<li><strong>index_subquery</strong><br>当子查询中查询的字段是<strong><em>非唯一性索引</em></strong>时，用来在 <code>IN</code> 子查询中替代 <code>ref</code> 类型。  </li>
+</ul>
+<p>　　例：<code>EXPLAIN SELECT * FROM vip_system_permission p1 WHERE p1.parent_id IN (SELECT DISTINCT parent_id FROM vip_system_permission)</code>  </p>
+<ul>
+<li><p><strong>range</strong><br>仅在给定的范围使用索引检索行。在输出的行中的 <code>key</code> 列说明使用了哪个索引。<code>key_len</code> 列包含了使用了索引的最长部分。对于这种类型下，ref列的值为NULL。<br><code>range</code> 可以用于当索引列使用以下任一个操作符与常量比较时使用：<code>=, &lt;&gt;, &gt;, &gt;=, &lt;, &lt;=, IS NULL, &lt;=&gt;,BETWEEN</code> 或者 <code>IN()</code>  </p>
+</li>
+<li><p><strong>index</strong><br><code>index</code> 索引连接类型与 <code>all</code> 相同，除了它是扫描索引树外（即全索引扫描）。这在两种情况下发生：  </p>
+</li>
+</ul>
+<p>　　1. 如果索引对于查询来说是覆盖索引并且可用于满足要求表的数据要求，这时只有索引树会被扫描。在这种情况下，<code>Extra</code> 列会显示为 <code>Using index</code>。一个只读索引扫描通常比 <code>ALL</code> 更快，因为索引的大小通常是比表的大小更小。<br>　　2. 全表扫描的执行是从索引读取的顺序去查找数据行。这时 <code>Extra</code> 列不会出现 <code>Uses index</code>。  </p>
+<p>　　MySQL 当查询仅使用单独索引的一部分列时才会使用这个连接类型。  </p>
+<ul>
+<li><strong>ALL</strong><br>从前表中每一个行组合进行全表扫描。如果表是第一个表并没有标识为 <code>const</code> 的话，这通常是不好的，并且在其他的情况下是非常糟糕的。所以，你可以通过添加索引来避免ALL连接类型，这使得行检索基于常量值或者从更早的表中的列值。</li>
+</ul>
+<h3 id="possible-keys-列"><a href="#possible-keys-列" class="headerlink" title="possible_keys 列"></a>possible_keys 列</h3><p>　　该列指出MySQL可以从该表中使用哪个索引去查找行。注意，该列完全独立于 <code>explain</code> 输出结果显示的表的顺序的。这意味着，一些在possible_keys里的键，在实际上可能无法在产生表的顺序时使用。<br>　　如果没有相关的索引，该列就为 <code>NULL</code>。在这种情况下，你可以通过测试 <code>WHERE</code> 子句检查它使用的列有没有适当的索引来提高查询的性能。如果的确如此的话，创建一个合适的索引并使用Explain来再次检查你的查询有没有用上了索引。<br>　　查看表有哪些索引，可以使用<code>show index from tbl_name</code>  </p>
+<hr>
+<h3 id="key-列"><a href="#key-列" class="headerlink" title="key 列"></a>key 列</h3><p>　　该列指出MySQL实际决定使用的key(索引）。如果MySQL决定使用 <code>possible_keys</code> 中之一的索引去查找行，那么那个索引的值就是该key列的值<br>　　不过，有可能key列的索引名没有出现在 <code>possible_keys</code> 列中。这可能发生在，如果 <code>possible_keys</code> 索引中没有一个是适合查找行的索引，但查询所选择的列都是其他索引中包含的列的情况。这意味着，命名的索引覆盖了所选择的列，所以尽管它不用于决定哪些行要检索，但一个索引扫描比数据行扫描更高效。<br>　　对于InnoDB,二级索引可能覆盖了所选择的列，尽管查询也选择了主键，因为InnoDB保存每一个二级索引里保存了主键的值。如果key列为NULL，MySQL会发现没有索引可用于执行更高效的查询。<br>　　强制MySQL去使用或者忽略在possible_keys列的某个索引，可以在查询中使用FORCE INDEX, USE INDEX 或者 IGNORE INDEX。<br>　　对于MyISAM和NDB表，执行ANALYZE TABLE可以帮助优化器选择更好的索引。对于NDB表，这也会提高分布式下推连接的性能。对于MyISAM表，myisamchk –analyze 与 analyze table的作用相同。  </p>
+<hr>
+<h3 id="key-len-列"><a href="#key-len-列" class="headerlink" title="key_len 列"></a>key_len 列</h3><p>　　该列指出MySQL决定使用的索引(key)的长度。如果key列为NULL，那么该列也为NULL。注意，key_len的值能够让你确定MySQL实际上使用了一个组合索引中的多少部分。  </p>
+<hr>
+<h3 id="ref-列"><a href="#ref-列" class="headerlink" title="ref 列"></a>ref 列</h3><p>　　该列显示了哪些列或常量是用于与在key列的命名的索引列来进行比较来从表中选择行的。<br>　　如果值为func，该值就会用于一些函数的结果集。为了查找出哪些函数，执行SHOW WARNINGS之后，使用EXPLAIN EXTENDED来查看。函数可能实际上是一个操作符，像算术操作那样。</p>
+<hr>
+<h3 id="rows-列"><a href="#rows-列" class="headerlink" title="rows 列"></a>rows 列</h3><p>　　该列指出MySQL认为它必须检验执行查询的行数。<br>　　对于InnoDB表，这个数值是个估计值，并不总是准确的。</p>
+<hr>
+<h3 id="filtered-列"><a href="#filtered-列" class="headerlink" title="filtered 列"></a>filtered 列</h3><p>　　该列指出，表行中的百分比将会被表的条件过滤。即，rows列显示了测试的行数，而<code>(rows * filtered / 100)</code> 显示了将与之前的表进行连接的行数。该列将会在你使用 <code>explain extended</code> 时显示出来。</p>
+<hr>
+<h3 id="extra-列-及常见的值"><a href="#extra-列-及常见的值" class="headerlink" title="extra 列 及常见的值"></a>extra 列 及常见的值</h3><p>该列包含了额外的关于MySQL执行查询的信息。  </p>
+<ul>
+<li><p><strong>const row not found</strong><br>对于像<code>select ... from tbl_name</code>这样的查询，该表是空的。  </p>
+</li>
+<li><p><strong>Deleting all rows</strong><br>对于DELETE，一些存储引擎(例如MyISAM)支持的一个处理方法简单并且快速地删除所有表行。如果引擎使用了这个优化，则Extra表的值就会显示为这个。  </p>
+</li>
+<li><p><strong>Distinct</strong><br>MySQL 查找不重复的值，所以，它会停止搜索当前行之后已经第一次匹配的行。  </p>
+</li>
+<li><p><strong>FirstMatch(tbl_name)</strong><br>它是用于表<code>tbl_name</code>的 semi-join FirstMatch策略的缩写  </p>
+</li>
+<li><p><strong>Full scan on NULL key</strong><br>这出现在当优化器不能使用索引来优化子查询时的一个备用策略。  </p>
+</li>
+<li><p><strong>Impossible HAVING</strong><br>HAVING子句总是为false并且不能检索到任何行。  </p>
+</li>
+<li><p><strong>Impossible WHERE</strong><br>WHERE子句总是为false并且不能检索到任何行。  </p>
+</li>
+<li><p><strong>Impossible WHERE noticed after reading const tables</strong><br>MySQL 已经读取了所有const(和system)表，并且注意到WHERE子句总是为false.  </p>
+</li>
+<li><p><strong>LooseScan(m…n)</strong><br>semi-join LooseScan策略被使用。m和n是索引部分的数字。  </p>
+</li>
+<li><p><strong>Materialize, Scan</strong><br>在MySQL 5.6.7 之前，这表明使用了一个独立的物化临时表。如果Scan出现，表示临时表索引没有用于读取表。否则，表示使用了索引来查找。同样也看Start materialize<br>在 MySQL 5.6.7 中，物化说明行的select_type列值为MATERIALIZED，并且行的table表是一个值为<subqueryn>  </subqueryn></p>
+</li>
+<li><p><strong>No matching min/max row</strong><br>对于类似select min(…) from … where condition这样的查询没有满足条件的行。  </p>
+</li>
+<li><p><strong>no matching row in const table</strong><br>对于一个连接查询，有一个空表或者一个没有满足唯一索引条件的行的表。  </p>
+</li>
+<li><p><strong>No matching rows after partition pruning</strong><br>对于DELETE或者UPDATE，优化器发现进行分区调整时发现没有数据可以删除或者更新。这类似于select语句的Impossible WHERE  </p>
+</li>
+<li><p><strong>No tables used</strong><br>　　查询没有from子句，或者有一个from dual子句。<br>　　对于INSERT或者REPLACE语句，当没有select部分时explain就会显示这个值。例如， 它会出现在explain insert into t values(10)，因为它等效于explain insert into t select 10 from dual.  </p>
+</li>
+<li><p><strong>Not exists</strong><br>　　MySQL能够在进行left join查询优化，在它发现匹配LEFT JOIN 标准一行数之后不会对于之前的行组合中在该表上检查更多的行。这有一个使用该优化的查询例子：  <code>select * from t1 left join t2 on t1.id = t2.id where t2.id is null</code><br>　　假设t2.id是定义为NOT NULL的。在这种情况下，MySQL扫描t1并使用t1.id的值查找t2的行。如果MySQL发现在t2中有匹配的行，它知道t2.id能够永不为NULL，并且不会扫描t2中具有相同id值的剩余的行。换句话说，对于每一个t1的行，MySQL只需要在t2中进行一次查找，而不管在t2中实际有多少匹配的行。  </p>
+</li>
+<li><p><strong>Using filesort</strong><br>　　MySQL 必须做一些额外的工作去决定如何检索的行进行排序。排序是通过根据连接类型所筛选的所有行然后保存要排序的键和这些所有经过WHERE子句筛选的所有行的指针来完成的。<br>　　这些排序键将被保存然后按排序的顺序来检索行数据。  </p>
+</li>
+<li><p><strong>Using where</strong><br>　　使用了WHERE从句来限制哪些行将与下一张表匹配或者是返回给用户。如果不想返回表中的全部行，并且连接类型ALL或index，这就会发生，或者是查询有问题  </p>
+</li>
+<li><p><strong>Using index</strong><br>从表中检索的列信息只需从索引信息中获取，而不用经过额外的访问实际的表数据来寻找。这个策略</p>
+</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/18/Linux/linux_note/" rel="prev" title="Linux常用命令">
+                Linux常用命令 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/12/22/MySQL/explain/"
+           data-title="MySQL Explain 详解" data-url="http://yoursite.com/2016/12/22/MySQL/explain/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/self_img/head.jpg"
+               alt="joash" />
+          <p class="site-author-name" itemprop="name">joash</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jiashuomeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/SprinG-vip/activities" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#id-列"><span class="nav-number">1.</span> <span class="nav-text">id 列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#select-type-列"><span class="nav-number">2.</span> <span class="nav-text">select_type 列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#table-列"><span class="nav-number">3.</span> <span class="nav-text">table 列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#partitions-列"><span class="nav-number">4.</span> <span class="nav-text">partitions 列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#type-列"><span class="nav-number">5.</span> <span class="nav-text">type 列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#possible-keys-列"><span class="nav-number">6.</span> <span class="nav-text">possible_keys 列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#key-列"><span class="nav-number">7.</span> <span class="nav-text">key 列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#key-len-列"><span class="nav-number">8.</span> <span class="nav-text">key_len 列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ref-列"><span class="nav-number">9.</span> <span class="nav-text">ref 列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rows-列"><span class="nav-number">10.</span> <span class="nav-text">rows 列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#filtered-列"><span class="nav-number">11.</span> <span class="nav-text">filtered 列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#extra-列-及常见的值"><span class="nav-number">12.</span> <span class="nav-text">extra 列 及常见的值</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">joash</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"hsvip"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

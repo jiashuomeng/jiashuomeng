@@ -1,0 +1,845 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Linux," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Every little helps" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="查看当前用户1whoami
+
+显示系统的所有shell123456789101112$ cat /etc/shells/bin/sh/bin/bash/sbin/nologin/usr/bin/sh/usr/bin/bash/usr/sbin/nologin/bin/tcsh/bin/csh切换：直接敲shell的名称
+
+输出当前shell ID1echo $$
+
+隔开同一行敲的多个命令1;
+
+另">
+<meta property="og:type" content="article">
+<meta property="og:title" content="shell总结">
+<meta property="og:url" content="http://yoursite.com/2017/04/19/Linux/linux_shell/index.html">
+<meta property="og:site_name" content="Every little helps">
+<meta property="og:description" content="查看当前用户1whoami
+
+显示系统的所有shell123456789101112$ cat /etc/shells/bin/sh/bin/bash/sbin/nologin/usr/bin/sh/usr/bin/bash/usr/sbin/nologin/bin/tcsh/bin/csh切换：直接敲shell的名称
+
+输出当前shell ID1echo $$
+
+隔开同一行敲的多个命令1;
+
+另">
+<meta property="og:updated_time" content="2017-04-18T17:47:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="shell总结">
+<meta name="twitter:description" content="查看当前用户1whoami
+
+显示系统的所有shell123456789101112$ cat /etc/shells/bin/sh/bin/bash/sbin/nologin/usr/bin/sh/usr/bin/bash/usr/sbin/nologin/bin/tcsh/bin/csh切换：直接敲shell的名称
+
+输出当前shell ID1echo $$
+
+隔开同一行敲的多个命令1;
+
+另">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/04/19/Linux/linux_shell/"/>
+
+
+
+
+
+  <title> shell总结 | Every little helps </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Every little helps</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/19/Linux/linux_shell/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="joash">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/self_img/head.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Every little helps">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Every little helps" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                shell总结
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-19T00:00:00-04:00">
+                2017-04-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/04/19/Linux/linux_shell/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/04/19/Linux/linux_shell/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="查看当前用户"><a href="#查看当前用户" class="headerlink" title="查看当前用户"></a>查看当前用户</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">whoami</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="显示系统的所有shell"><a href="#显示系统的所有shell" class="headerlink" title="显示系统的所有shell"></a>显示系统的所有shell</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">$ cat /etc/shells</div><div class="line"></div><div class="line">/bin/sh</div><div class="line">/bin/bash</div><div class="line">/sbin/nologin</div><div class="line">/usr/bin/sh</div><div class="line">/usr/bin/bash</div><div class="line">/usr/sbin/nologin</div><div class="line">/bin/tcsh</div><div class="line">/bin/csh</div><div class="line"></div><div class="line">切换：直接敲shell的名称</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="输出当前shell-ID"><a href="#输出当前shell-ID" class="headerlink" title="输出当前shell ID"></a>输出当前shell ID</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo $$</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="隔开同一行敲的多个命令"><a href="#隔开同一行敲的多个命令" class="headerlink" title="隔开同一行敲的多个命令"></a>隔开同一行敲的多个命令</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">;</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="另起一行"><a href="#另起一行" class="headerlink" title="另起一行"></a>另起一行</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">\</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h3><p>变量名=值</p>
+<ol>
+<li>变量名不能以数字开头</li>
+<li>等号两边不能有空格</li>
+<li>值用双引号引起来</li>
+<li>定义变量时不加$，引用时需要加$</li>
+<li>在终端敲该命令，所得的变量是当前shell的变量</li>
+<li>单引号引用的变量不会被解析</li>
+<li>这样定义是本地变量，不会影响到子shell</li>
+</ol>
+<hr>
+<h3 id="变量定义"><a href="#变量定义" class="headerlink" title="变量定义"></a>变量定义</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">declare -x dd=12 / export yy=10</div><div class="line">	定义环境变量</div><div class="line">	可以影响到所有子shell</div><div class="line"></div><div class="line">declare +x dd</div><div class="line">	将环境变量变成本地变量</div><div class="line"></div><div class="line">declare -r dd （readonly dd）</div><div class="line">	将变量设为只读</div><div class="line"></div><div class="line">declare -i aa #定义整型，目的是可以做数值运算，默认情况下会直接输出</div><div class="line">let bb=1+8 		同上</div><div class="line">cc=((1+1)) 		同上</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="输出变量"><a href="#输出变量" class="headerlink" title="输出变量"></a>输出变量</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">echo 		</div><div class="line">	-n 	输出不换行</div><div class="line">	-e 	解析 \n 等字符</div><div class="line"></div><div class="line">\a 发出警告声；</div><div class="line">\b 删除前一个字符；</div><div class="line">\c 最后不加上换行符号；</div><div class="line">\f 换行但光标仍旧停留在原来的位置；</div><div class="line">\n 换行且光标移至行首；</div><div class="line">\r 光标移至行首，但不换行；</div><div class="line">\t 插入tab；</div><div class="line">\v 与\f相同；</div><div class="line">\\ 插入\字符；</div><div class="line">\nnn 插入nnn（八进制）所代表的ASCII字符；</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="取消变量"><a href="#取消变量" class="headerlink" title="取消变量"></a>取消变量</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">unset</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="显示设置变量"><a href="#显示设置变量" class="headerlink" title="显示设置变量"></a>显示设置变量</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">set 		显示所有变量</div><div class="line">set 1 2 3 4 5  设置参数</div><div class="line"></div><div class="line">env 		显示所有环境变量</div><div class="line">export 		显示所有环境变量</div><div class="line">export -p	显示所有环境变量</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="方法参数取值"><a href="#方法参数取值" class="headerlink" title="方法参数取值"></a>方法参数取值</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$0    文件的名字</div><div class="line">$#    参数的个数</div><div class="line">$&#123;12&#125; 文件的第12个参数</div><div class="line">$*    所有的参数</div><div class="line">$? 记录上面的命令是否执行成功，0表示失败，非0表示成功</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="全局变量"><a href="#全局变量" class="headerlink" title="全局变量"></a>全局变量</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$PATH</div><div class="line">$HOME 	家目录</div><div class="line">$USER 	当前登录用户</div><div class="line">$PS1 	提示符 export PS1=&quot;\[\e[36m\][\u@\h \W]\$\[\e[m\] &quot;</div><div class="line">$LAGN 	系统当前编码</div><div class="line">$REPLY 	read默认赋予的变量</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="查看系统所支持的所有编码"><a href="#查看系统所支持的所有编码" class="headerlink" title="查看系统所支持的所有编码"></a>查看系统所支持的所有编码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">locale -a</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="读取输入值"><a href="#读取输入值" class="headerlink" title="读取输入值"></a>读取输入值</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">read -p &quot;pleace input word:&quot; name</div><div class="line">	相当于先输出再读取变量</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="数组操作"><a href="#数组操作" class="headerlink" title="数组操作"></a>数组操作</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">xx=(aa bb cc dd) 		赋值</div><div class="line">echo $&#123;xx[0]&#125; 			取值第一个元素</div><div class="line">echo $&#123;xx[*]&#125;  			取所有		</div><div class="line">echo $&#123;xx[@]&#125; 			取所有</div><div class="line">echo $&#123;!xx[@]&#125; 			查看所有下标</div><div class="line">echo $&#123;#xx[@]&#125;			查看元素个数</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="字符串中执行命令"><a href="#字符串中执行命令" class="headerlink" title="字符串中执行命令"></a>字符串中执行命令</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(hostname) 或者`hostname`</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="查看系统限制"><a href="#查看系统限制" class="headerlink" title="查看系统限制"></a>查看系统限制</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">ulimit -a</div><div class="line">	</div><div class="line"></div><div class="line">core file size          (blocks, -c) 0</div><div class="line">data seg size           (kbytes, -d) unlimited</div><div class="line">scheduling priority             (-e) 0</div><div class="line">file size               (blocks, -f) unlimited</div><div class="line">pending signals                 (-i) 7866</div><div class="line">max locked memory       (kbytes, -l) 64</div><div class="line">max memory size         (kbytes, -m) unlimited</div><div class="line">open files                      (-n) 1024</div><div class="line">pipe size            (512 bytes, -p) 8</div><div class="line">POSIX message queues     (bytes, -q) 819200</div><div class="line">real-time priority              (-r) 0</div><div class="line">stack size              (kbytes, -s) 8192</div><div class="line">cpu time               (seconds, -t) unlimited</div><div class="line">max user processes              (-u) 4096</div><div class="line">virtual memory          (kbytes, -v) unlimited</div><div class="line">file locks                      (-x) unlimited</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="前后截断字符串"><a href="#前后截断字符串" class="headerlink" title="前后截断字符串"></a>前后截断字符串</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">r=$&#123;path#*kkk/bin&#125;</div><div class="line">	删除path变量中的按 *kkk/bin 匹配的前面的字符串，然后赋值给r（第一个匹配开始处理）</div><div class="line">r=$&#123;path##*kkk/bin&#125;</div><div class="line">	删除path变量中的按 *kkk/bin 匹配的前面的字符串，然后赋值给r（最后一个匹配开始处理）</div><div class="line"></div><div class="line">#删除前面的字符串，%删除后面的字符串</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="赋值检查"><a href="#赋值检查" class="headerlink" title="赋值检查"></a>赋值检查</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">r=$&#123;xx-&quot;hello&quot;&#125; 		如果变量xx存在就将xx值赋予r否则将hello赋值给r</div><div class="line">r=$&#123;xx:-&quot;hello&quot;&#125; 		在上面的基础上还要判断是否为空</div><div class="line">r=$&#123;xx:=&quot;hello&quot;&#125; 		在上面的基础上将字符串赋值给xx</div><div class="line">r=$&#123;xx:?&quot;error&quot;&#125;  		检查xx是否为空，如果是空的话显示？后面定义的字符串警告信息</div><div class="line">r=$&#123;xx:+&quot;hello&quot;&#125;  		如果xx非空将后面的字符串赋值给r</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="查看命令执行顺序"><a href="#查看命令执行顺序" class="headerlink" title="查看命令执行顺序"></a>查看命令执行顺序</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">type -a ls 	# 查看命令执行顺序</div><div class="line"></div><div class="line">type source  查看source是否是shell内置命令，如果是的话which查不出来</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="登录时读取配置文件顺序"><a href="#登录时读取配置文件顺序" class="headerlink" title="登录时读取配置文件顺序"></a>登录时读取配置文件顺序</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">/etc/profile 	环境变量</div><div class="line">/etc/inputrc 	快捷键</div><div class="line">~/.bash_profile</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="set排错"><a href="#set排错" class="headerlink" title="set排错"></a>set排错</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">set -u 	开启当所用到的变量没有被设置时就会报错</div><div class="line">	+u 	关闭</div><div class="line">	-x 	追踪每一个操作，排错时候使用</div><div class="line">	+x 	关闭</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="文件重定向"><a href="#文件重定向" class="headerlink" title="文件重定向"></a>文件重定向</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">1&gt;</div><div class="line"></div><div class="line">ls -a &gt; a.txt 		文件重定向(清空)</div><div class="line">ls -a &gt;&gt; a.txt 		文件重定向(追加)  </div><div class="line">xx 2&gt; a.txt			只重定向错误的结果</div><div class="line">xx &amp;&gt;&gt; a.txt 		不管正确还是错误全部都追加</div><div class="line"></div><div class="line">xx &gt; a.txt 2&gt;&amp;1 	错误的结果像正确的一样导入</div><div class="line"></div><div class="line"></div><div class="line">2&gt;</div><div class="line"></div><div class="line">$ cat &gt; filename &lt;&lt;EOF</div><div class="line">&gt; nihao</div><div class="line">&gt; $HOME</div><div class="line">&gt; $PATH</div><div class="line">&gt; EOF</div><div class="line">$ cat filename </div><div class="line">nihao</div><div class="line">/home/mjs</div><div class="line">/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/opt/jdk8/bin:/opt/redis/redis-2.8.24/src:/home/mjs/.local/bin:/home/mjs/bin</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="文本替换"><a href="#文本替换" class="headerlink" title="文本替换"></a>文本替换</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">tr &apos;a-z&apos; &apos;A-Z&apos; &lt; hosts</div><div class="line">		将hosts文件中的字母从小写转为大写并输出到屏幕</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="搜索文件中的内容"><a href="#搜索文件中的内容" class="headerlink" title="搜索文件中的内容"></a>搜索文件中的内容</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">grep		</div><div class="line">	-i	不区分大小写</div><div class="line">	--color 颜色高亮</div><div class="line">	-n 出现在第几行</div><div class="line">	-v 反向过滤，不显示选中的结果，^表示开头</div><div class="line">	-A3 过滤选中行，并向下延伸3行</div><div class="line">	-B3 过滤选中行，并向上延伸3行</div><div class="line">	-q 不显示结果</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="文件内容追加"><a href="#文件内容追加" class="headerlink" title="文件内容追加"></a>文件内容追加</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">tee -a xx</div><div class="line">	可追加到xx文件中</div><div class="line"></div><div class="line">cut xx | tee xx | grep aa # tee的作用是将输出信息保存在xx文件中</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="切分文本"><a href="#切分文本" class="headerlink" title="切分文本"></a>切分文本</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">1&gt; </div><div class="line"></div><div class="line">cut -d: -f1 /etc/passwd</div><div class="line">	-d：分隔符</div><div class="line">	-f：查看第几部分</div><div class="line"></div><div class="line"></div><div class="line">2&gt;</div><div class="line"></div><div class="line">split -b 10k /etc/services xxx 	将services文件以每块10k前缀为xxx进行切分</div><div class="line">      -l 100 以每100行一个文件的粒度切分</div><div class="line"></div><div class="line"></div><div class="line">3&gt;</div><div class="line"></div><div class="line">awt -F: &apos;&#123;print $1&#125;&apos; xx 	以:为切分附（默认是空格）将xx文件切分，然后取第一部分。0表示整行记录</div><div class="line"></div><div class="line">&apos;&#123;print NR, $1, NF&#125;&apos; 		NR添加行号，NF是显示该行有几个字段</div><div class="line"></div><div class="line">awt -F: &apos;$3&lt;=1 &#123;print $1&#125;&apos; xx 		前面 $3&lt;=1 是条件</div><div class="line"></div><div class="line">awk -F: &apos;BEGIN&#123;OFS=&quot;\t\t&quot;; ORS=&quot;\n\n&quot;&#125;&#123;print $1 $2&#125;&apos; xx</div><div class="line">					OFS表示每一部分是用什么分隔符（tab键），ORS表示每行之间使用什么分隔符</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">sort </div><div class="line">	-n 	以数字的形式排序</div><div class="line">	-r 	反向排序</div><div class="line">	</div><div class="line">sort -t: -k3 -n passwd 		以切分出来的第三部分来排序整行</div><div class="line">	-t：分隔符</div><div class="line">	-k：第几部分</div><div class="line">	-u：排除重复（与通过管道传给 uniq 命令等效，该命令 -c 参数可以统计每个单词出现几次）</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="统计字符"><a href="#统计字符" class="headerlink" title="统计字符"></a>统计字符</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">wc 统计字符</div><div class="line">	-l 查看几行</div><div class="line">	-w 几个单词</div><div class="line">	-c 几个字符</div><div class="line"></div><div class="line">wc ProducerCustomer.java </div><div class="line">	</div><div class="line">	85  183 1720 ProducerCustomer.java</div><div class="line"></div><div class="line">	85：行数</div><div class="line">	183：单词数</div><div class="line">	1720：字符数</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="将Tab键转化为空格"><a href="#将Tab键转化为空格" class="headerlink" title="将Tab键转化为空格"></a>将Tab键转化为空格</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">col -x 和 expand</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="查看两个文件异同"><a href="#查看两个文件异同" class="headerlink" title="查看两个文件异同"></a>查看两个文件异同</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">diff</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="不能使用管道的命令使用管道"><a href="#不能使用管道的命令使用管道" class="headerlink" title="不能使用管道的命令使用管道"></a>不能使用管道的命令使用管道</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">xargs</div><div class="line"></div><div class="line">	find ./  -name *.sh | xargs ls -l</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="sed文本操作"><a href="#sed文本操作" class="headerlink" title="sed文本操作"></a>sed文本操作</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">sed &apos;1,2d&apos; hosts 		删除前两行</div><div class="line">	-i 		直接修改文件，默认是输出到控制台</div><div class="line">	-e 		同时可以做多个操作，一个操作写一个-e</div><div class="line">	-f 		调用文件中的内容</div><div class="line"></div><div class="line">sed &apos;$d&apos; hosts  		删除最后一行</div><div class="line"></div><div class="line">sed &apos;s/root/ROOT/g&apos; xx 		将root转换为ROOT</div><div class="line"></div><div class="line">sed &apos;/adm/ixxxxxxxxxxxxxx&apos; xx 			在adm的上一行添加xxxxxxxxxxxxxx</div><div class="line"></div><div class="line">sed &apos;/adm/axxxxxxxxxxxxxx&apos; xx 			在adm的下一行添加xxxxxxxxxxxxxx</div><div class="line"></div><div class="line">sed &apos;/adm/cxxxxxxxxxxxxxx&apos; xx 			将adm行换掉xxxxxxxxxxxxxx</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="运行shell"><a href="#运行shell" class="headerlink" title="运行shell"></a>运行shell</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">./xx.sh 		开启子shell运行</div><div class="line">bash xx.sh 		开启子shell运行</div><div class="line">source xx.sh 	当前shell下运行</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="比较"><a href="#比较" class="headerlink" title="比较"></a>比较</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">            数字            字符</div><div class="line">等于        -eq              ==</div><div class="line">不等于 		-ne 			 !=</div><div class="line">大于        -gt              &gt;</div><div class="line">大于等于    -ge              &gt;=</div><div class="line">小于        -lt              &lt;</div><div class="line">小于等于    -le              &lt;=</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="文件判断"><a href="#文件判断" class="headerlink" title="文件判断"></a>文件判断</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[ -f /etc/passwd ]   #判断文件是否存在（存在返回0）</div><div class="line">[ -r /etc/passwd ]   #判断文件是否有读权限</div><div class="line">[ -w /etc/passwd ]   #判断文件是否有写权限</div><div class="line">[ -x /etc/passwd ]   #判断文件是否有执行权限</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="if语句"><a href="#if语句" class="headerlink" title="if语句"></a>if语句</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">if  [ &quot;$?&quot; -eq 0 ]; then</div><div class="line">	echo &quot;$1 存在&quot;</div><div class="line">elif  []; then</div><div class="line">else</div><div class="line">	echo &quot;$1 不存在&quot;</div><div class="line">fi</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="case语句"><a href="#case语句" class="headerlink" title="case语句"></a>case语句</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">case</div><div class="line"></div><div class="line">case $1 in</div><div class="line">		[Tt]o*)</div><div class="line">			echo tom</div><div class="line">			;;</div><div class="line">		bob | mary )</div><div class="line">			echo xxx</div><div class="line">			;;</div><div class="line">		*)</div><div class="line">			echo zzz</div><div class="line">			;;</div><div class="line">esac</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="定义函数"><a href="#定义函数" class="headerlink" title="定义函数"></a>定义函数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">function xx ()&#123;</div><div class="line">	echo &quot;hello&quot;</div><div class="line">&#125;</div><div class="line"></div><div class="line">xx ()&#123;</div><div class="line">	echo &quot;hello&quot;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="while循环"><a href="#while循环" class="headerlink" title="while循环"></a>while循环</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">while []</div><div class="line">do</div><div class="line">	$xx</div><div class="line">done</div><div class="line"></div><div class="line">until与while相反，一开始不满足，直到满足之后就会跳出循环</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="for循环"><a href="#for循环" class="headerlink" title="for循环"></a>for循环</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">for xx in aa,bb cc</div><div class="line">do </div><div class="line">done</div></pre></td></tr></table></figure>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/18/Linux/linux_note/" rel="next" title="Linux常用命令">
+                <i class="fa fa-chevron-left"></i> Linux常用命令
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/04/19/Linux/linux_shell/"
+           data-title="shell总结" data-url="http://yoursite.com/2017/04/19/Linux/linux_shell/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/self_img/head.jpg"
+               alt="joash" />
+          <p class="site-author-name" itemprop="name">joash</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jiashuomeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/SprinG-vip/activities" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#查看当前用户"><span class="nav-number">1.</span> <span class="nav-text">查看当前用户</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#显示系统的所有shell"><span class="nav-number">2.</span> <span class="nav-text">显示系统的所有shell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输出当前shell-ID"><span class="nav-number">3.</span> <span class="nav-text">输出当前shell ID</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#隔开同一行敲的多个命令"><span class="nav-number">4.</span> <span class="nav-text">隔开同一行敲的多个命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#另起一行"><span class="nav-number">5.</span> <span class="nav-text">另起一行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#变量"><span class="nav-number">6.</span> <span class="nav-text">变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#变量定义"><span class="nav-number">7.</span> <span class="nav-text">变量定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输出变量"><span class="nav-number">8.</span> <span class="nav-text">输出变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#取消变量"><span class="nav-number">9.</span> <span class="nav-text">取消变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#显示设置变量"><span class="nav-number">10.</span> <span class="nav-text">显示设置变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法参数取值"><span class="nav-number">11.</span> <span class="nav-text">方法参数取值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#全局变量"><span class="nav-number">12.</span> <span class="nav-text">全局变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看系统所支持的所有编码"><span class="nav-number">13.</span> <span class="nav-text">查看系统所支持的所有编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#读取输入值"><span class="nav-number">14.</span> <span class="nav-text">读取输入值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数组操作"><span class="nav-number">15.</span> <span class="nav-text">数组操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串中执行命令"><span class="nav-number">16.</span> <span class="nav-text">字符串中执行命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看系统限制"><span class="nav-number">17.</span> <span class="nav-text">查看系统限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#前后截断字符串"><span class="nav-number">18.</span> <span class="nav-text">前后截断字符串</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#赋值检查"><span class="nav-number">19.</span> <span class="nav-text">赋值检查</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看命令执行顺序"><span class="nav-number">20.</span> <span class="nav-text">查看命令执行顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#登录时读取配置文件顺序"><span class="nav-number">21.</span> <span class="nav-text">登录时读取配置文件顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#set排错"><span class="nav-number">22.</span> <span class="nav-text">set排错</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件重定向"><span class="nav-number">23.</span> <span class="nav-text">文件重定向</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文本替换"><span class="nav-number">24.</span> <span class="nav-text">文本替换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#搜索文件中的内容"><span class="nav-number">25.</span> <span class="nav-text">搜索文件中的内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件内容追加"><span class="nav-number">26.</span> <span class="nav-text">文件内容追加</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#切分文本"><span class="nav-number">27.</span> <span class="nav-text">切分文本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#排序"><span class="nav-number">28.</span> <span class="nav-text">排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#统计字符"><span class="nav-number">29.</span> <span class="nav-text">统计字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#将Tab键转化为空格"><span class="nav-number">30.</span> <span class="nav-text">将Tab键转化为空格</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看两个文件异同"><span class="nav-number">31.</span> <span class="nav-text">查看两个文件异同</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不能使用管道的命令使用管道"><span class="nav-number">32.</span> <span class="nav-text">不能使用管道的命令使用管道</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sed文本操作"><span class="nav-number">33.</span> <span class="nav-text">sed文本操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行shell"><span class="nav-number">34.</span> <span class="nav-text">运行shell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#比较"><span class="nav-number">35.</span> <span class="nav-text">比较</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件判断"><span class="nav-number">36.</span> <span class="nav-text">文件判断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#if语句"><span class="nav-number">37.</span> <span class="nav-text">if语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#case语句"><span class="nav-number">38.</span> <span class="nav-text">case语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定义函数"><span class="nav-number">39.</span> <span class="nav-text">定义函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#while循环"><span class="nav-number">40.</span> <span class="nav-text">while循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#for循环"><span class="nav-number">41.</span> <span class="nav-text">for循环</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">joash</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"hsvip"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
